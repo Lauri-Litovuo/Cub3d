@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cubed.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llitovuo <llitovuo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 11:18:06 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/07/22 11:18:35 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/07/26 15:35:19 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,21 @@
 # define IMG_SIZE 64 // 64 x 64 pixels
 # define PI 3.14159265358979323846
 
+typedef	t_types{
+	WALL = '1',
+	EMPTY = '0',
+	PLAYER_N = 'N',
+	PLAYER_E = 'E',
+	PLAYER_S = 'S',
+	PLAYER_W = 'W',
+	BLANK = 'X'
+};
 
 typedef struct s_map
 {
-	char	type; // wall ('1'), empty space('0'), player ('P') etc
-	int		is_blank; 
+	char	type;
+	int		is_blank;
+
 	/* IS_BLANK USAGE:
 
 	If we have a map like this:
@@ -67,10 +77,20 @@ typedef struct s_data
 
 	t_map		**map;
 	
+	char		*map_name;
 	int			map_height; // is this needed?
 	int			map_width; // is this needed?
 	long long	player_coord[2]; // x and y coord of the player (will be in pixels)
 	double		player_angle; // 0 means player is facing north, 90 east, 180 south, 270 west. 360 is again 0.
+	char	*texture_path_n;
+	char	*texture_path_e;
+	char	*texture_path_s;
+	char	*texture_path_w;
+	int		*floor_color;
+	int		*ceiling_color;
+	char	**map_lines;
+	char	**file;
+	int		info_lines_count;
 }			t_data;
 
 

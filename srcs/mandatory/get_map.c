@@ -55,23 +55,10 @@ void    allocate_map(t_data *data)
     }
 }
 
-void    is_map_valid(char *map_name)
-{
-    // Check map validation here
-    // If something is not right, use error_exit function.
-
-
-    if (map_name == NULL) // this is just a test
-        return ;
-
-}
 
 void    get_map(t_data *data, char *map_name)
 {
-
-    // First, we should check if map is valid (surrounded with walls etc)
-
-    is_map_valid(map_name);
+    is_map_valid(data, map_name);
 
     // If map is valid, then we allocate map based on map height and width
     // I'll use now some random values for testing!
