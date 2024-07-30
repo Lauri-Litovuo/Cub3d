@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 11:18:06 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/07/26 15:35:19 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/07/29 15:49:21 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,8 @@ typedef struct s_data
 	t_map		**map;
 	
 	char		*map_name;
-	int			map_height; // is this needed?
-	int			map_width; // is this needed?
+	int			map_height;
+	int			map_width;
 	long long	player_coord[2]; // x and y coord of the player (will be in pixels)
 	double		player_angle; // 0 means player is facing north, 90 east, 180 south, 270 west. 360 is again 0.
 	char	*texture_path_n;
@@ -91,6 +91,8 @@ typedef struct s_data
 	char	**map_lines;
 	char	**file;
 	int		info_lines_count;
+	int		file_height;
+	int		map_start;
 }			t_data;
 
 

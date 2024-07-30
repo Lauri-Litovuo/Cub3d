@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llitovuo <llitovuo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 11:17:31 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/07/22 11:17:37 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/07/29 18:35:22 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,11 @@ int	main(int argc, char *argv[])
 		ft_putendl_fd("Please give one map (.cub -file) as an argument", 2);
 		return (1);
 	}
-
 	data = malloc(sizeof(t_data));
 	if (data == NULL)
 		sys_error_exit(data, "Malloc failed", 0);
-
 	init_data(data);
+	
 	get_map(data, argv[1]);
 
 	draw_image(data);

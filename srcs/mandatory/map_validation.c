@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 14:37:13 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/07/26 15:35:31 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/07/29 18:52:29 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,79 +23,54 @@ int	check_map_name(char *map_name)
 		return (-1);
 	while (map_name[i] != '\0')
 		i++;
-	if (map_name[i - 1] != 'b' || map_name[i - 2] != 'u' || map_name[i - 3] != 'c' || map_name[i - 4] != '.')
+	if (map_name[i - 1] != 'b' || map_name[i - 2] != 'u'
+		|| map_name[i - 3] != 'c' || map_name[i - 4] != '.')
 		return (-1);
 	return (0);
 }
 
-int	copy_file_contents(t_data *data, char *map_name)
+int	get_file_height(t_data *data, char *map_name)
 {
-	int		fd;
-	char	*line;
-	int		i;
+	int			fd;
+	char		*buffer;
 
 	fd = open(map_name, O_RDONLY);
 	if (fd < 0)
-		return (-1);
-	i = 0;
-	while (get_next_line(fd, &line) > 0)
+		error_exit(data, "Map file could not be opened", 0);
+	data->map_start = 0;
+	while (1)
 	{
-		data->map->file[i] = ft_strdup(line);
-		i++;
-	}
-	data->map->file[i] = NULL;
-	close(fd);
-	return (0);
-}
-
-int	check_map_hight(t_data *data)
-{
-	char	*line;
-	int		i;
-
-	i = 0;
-	data->map_height = 0;
-	if (data->map->file[i] == NULL)
-		return (-1);
-	while (data->map->file[i] != NULL)
-		i++;
-	i--;
-	while (i > 0)
-	{
-		line = data->map->file[i];
-		if (line[0] == '1' || line[0] == '0' || line[0] == ' ' || line[0] == 'N' || line[0] == 'S' || line[0] == 'E' || line[0] == 'W')
-		{
-			data->map_height++;
-			i--;
-		}
-		else
+		buffer = get_next_line(fd);
+		if (buffer == NULL)
 			break ;
+		if (data->map_start == 0 && (buffer[0] != '1' || buffer[0] != '0'
+				|| buffer[0] != ' ' || buffer[0] != 'N'
+				|| buffer[0] != 'S' || buffer[0] != 'E' || buffer[0] != 'W'))
+			data->info_lines_count++;
+		else
+			data->map_start = data->info_lines_count;
+		data->file_height++;
+		free(buffer);
 	}
-	if (i < 6 || data->map_height == 0)
-		return (-1);
-	data->map->
+	close (fd);
+	data->map_height = data->file_height - data->info_lines_count;
+	return (0);
 }
 
-int	check_texture_paths(t_data *data, char *map_name)
+int	check_info_lines(t_data *data)
 {
-	if (data->map->texture_path_e == NULL || data->map->texture_path_n == NULL || data->map->texture_path_s == NULL || data->map->texture_path_w == NULL)
-		return (-1);
-	if(data->map->floor_color == NULL || data->map->ceiling_color == NULL)
+	if (data->info_lines_count < 6)
 		return (-1);
 	return (0);
 }
 
-void    is_map_valid(t_data *data, char *map_name)
+int	is_map_valid(t_data *data, char *map_name)
 {
 	if (check_map_name(map_name) < 0)
 		error_exit(data, "Map name is invalid", 0);
-	if (copy_file_contents(data, map_name) < 0)
-		error_exit(data, "Map file could not be opened", 0);
-	if (check_map_syntax(data) < 0)
-		error_exit(data, "Map syntax is invalid", 0);
-	if (check_texture_paths(data, map_name) < 0)
-		error_exit(data, "Texture paths are missing", 0);
-    if (map_name == NULL)
-        return ;
-
+	if (get_file_height(data, map_name) < 0)
+		error_exit(data, "Map file is invalid", 0);
+	if (check_info_lines(data) < 0)
+		error_exit(data, "Map file is invalid", 0);
+	return (0);
 }

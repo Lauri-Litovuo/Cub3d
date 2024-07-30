@@ -1,16 +1,56 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_map.c                                          :+:      :+:    :+:   */
+/*   map_validation_utils.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/29 18:36:51 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/07/29 18:50:50 by llitovuo         ###   ########.fr       */
+/*   Created: 2024/07/29 16:06:46 by llitovuo          #+#    #+#             */
+/*   Updated: 2024/07/30 15:31:53 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cubed.h"
+
+void	check_map_syntax(t_data *data)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (data->map[i] != NULL)
+	{
+		j = 0;
+		while (j < data->map_width)
+		{
+			if (data->map[i][j].type != '1'
+				&& data->map[i][j].type != '0' && data->map[i][j].type != ' ')
+				sys_error_exit(data, "Invalid map syntax", 0);
+			j++;
+		}
+		i++;
+	}
+}
+
+void	get_widest_width(t_data *data)
+{
+	int	i;
+	int	j;
+	int	width;
+
+	i = 0;
+	width = 0;
+	while (i < data->map_height)
+	{
+		j = 0;
+		while (data->map[i][j].type != '\0')
+			j++;
+		if (j > width)
+			width = j;
+		i++;
+	}
+	data->map_width = width;
+}
 
 void	allocate_map(t_data *data)
 {
@@ -19,9 +59,9 @@ void	allocate_map(t_data *data)
 	data->map = malloc((data->map_height) * sizeof(t_map));
 	if (data->map == NULL)
 		sys_error_exit(data, "Malloc failed", 0);
-	i = data->info_lines_count;
+	i = 0;
 	get_widest_width(data);
-	while (i < data->map_height)
+	while (i + data->info_lines_count < data->map_height)
 	{
 		data->map[i] = malloc((data->map_width) * sizeof(t_map));
 		if (data->map[i] == NULL)
@@ -57,63 +97,14 @@ int	assign_map_contents(t_data *data)
 	return (0);
 }
 
-void	change_spaces_to_x(t_data *data)
+int	check_texture_paths(t_data *data, char *map_name)
 {
-	int		x;
-	int		y;
-	t_map	**map;
-
-	x = 0;
-	y = 0;
-	map = data->map;
-	while (y < data->map_height)
-	{
-		x = 0;
-		while (x < data->map_width)
-		{
-			if (map[y][x].type == ' ')
-				map[y][x].type = 'X';
-			x++;
-		}
-		y++;
-	}
-}
-
-int	copy_file_contents(t_data *data, char *map_name)
-{
-	int		fd;
-	char	*line;
-	int		i;
-
-	data->file = malloc ((data->file_height + 1) * sizeof(char *));
-	if (data->file == NULL)
+	if (data->texture_path_e == NULL
+		|| data->texture_path_n == NULL || data->texture_path_s == NULL
+		|| data->texture_path_w == NULL)
 		return (-1);
-	fd = open(map_name, O_RDONLY);
-	if (fd < 0)
+	if (data->floor_color == NULL || data->ceiling_color == NULL)
 		return (-1);
-	i = 0;
-	while (get_next_line(fd, &line) > 0)
-	{
-		data->file[i] = ft_strdup(line);
-		i++;
-	}
-	data->file[i] = NULL;
-	close(fd);
 	return (0);
 }
 
-void	get_map(t_data *data, char *map_name)
-{
-	is_map_valid(data, map_name);
-	if (copy_file_contents(data, map_name) == -1)
-		error_exit(data, "Map file could not be opened", 0);
-	allocate_map(data);
-	assign_map(data);
-	change_spaces_to_x(data);
-	//print_map(data);
-	if (check_map_syntax(data) == -1)
-		error_exit(data, "Map syntax is invalid", 0);
-	if (check_map_walls(data) == -1)
-		error_exit(data, "Map is not surrounded by walls", 0);
-			
-}
