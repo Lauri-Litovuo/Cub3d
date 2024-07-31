@@ -6,13 +6,13 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 14:37:13 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/07/29 18:52:29 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/07/30 16:21:14 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cubed.h"
 
-int	check_map_name(char *map_name)
+static int	check_map_name(char *map_name)
 {
 	int	i;
 
@@ -29,7 +29,7 @@ int	check_map_name(char *map_name)
 	return (0);
 }
 
-int	get_file_height(t_data *data, char *map_name)
+static int	get_file_height(t_data *data, char *map_name)
 {
 	int			fd;
 	char		*buffer;
@@ -57,7 +57,7 @@ int	get_file_height(t_data *data, char *map_name)
 	return (0);
 }
 
-int	check_info_lines(t_data *data)
+static int	check_info_lines(t_data *data)
 {
 	if (data->info_lines_count < 6)
 		return (-1);

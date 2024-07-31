@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 18:36:51 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/07/29 18:50:50 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/07/31 11:41:16 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ int	assign_map_contents(t_data *data)
 			data->map[k][j].type = data->file[i][j];
 			j++;
 		}
+		if (j == 0 && i != data->map_height)
+			return (-1);
 		while (j < data->map_width)
 		{
 			data->map[k][j].type = ' ';
@@ -55,6 +57,38 @@ int	assign_map_contents(t_data *data)
 		k++;
 	}
 	return (0);
+}
+
+void	free_2d_array_len(char **strs, int len)
+{
+	while (len >= 0)
+	{
+		free(strs[len]);
+		len--;
+	}
+	free (strs);
+}
+
+int	create_map_lines(t_data *data)
+{
+	int	i;
+	int	j;
+	int	k;
+
+	i = data->info_lines_count;
+	k = 0;
+	data->map_lines = malloc ((data->map_height + 1) * sizeof(char *));
+	if (data->map_lines == NULL)
+		return (-1);
+	while (i < data->map_height)
+	{
+		data->map_lines[k] = ft_strdup(data->file[i]);
+		if (!data->map_lines[k])
+			return (free_map_lines(data->map_lines, k),-1);
+		i++;
+	}
+	data->map_lines[k] = NULL;
+	return (1);
 }
 
 void	change_spaces_to_x(t_data *data)
@@ -92,9 +126,13 @@ int	copy_file_contents(t_data *data, char *map_name)
 	if (fd < 0)
 		return (-1);
 	i = 0;
-	while (get_next_line(fd, &line) > 0)
+	while (1)
 	{
+		line = get_next_line(fd);
+		if (!line)
+			break ;
 		data->file[i] = ft_strdup(line);
+		free (line);
 		i++;
 	}
 	data->file[i] = NULL;
@@ -109,11 +147,13 @@ void	get_map(t_data *data, char *map_name)
 		error_exit(data, "Map file could not be opened", 0);
 	allocate_map(data);
 	assign_map(data);
+	if (create_map_lines(data) < 0)
+		sys_error_exit(data, "Malloc failed", 0);
 	change_spaces_to_x(data);
 	//print_map(data);
-	if (check_map_syntax(data) == -1)
-		error_exit(data, "Map syntax is invalid", 0);
-	if (check_map_walls(data) == -1)
+	check_map_syntax(data);
+	if (data->player_flag == 0)
+		error_exit(data, "No player", 0);
+	if (check_map_borders(data) == -1)
 		error_exit(data, "Map is not surrounded by walls", 0);
-			
 }

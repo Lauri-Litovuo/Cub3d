@@ -6,33 +6,49 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 16:06:46 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/07/30 15:31:53 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/07/31 09:24:53 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cubed.h"
 
+void	assign_player_position(t_data *data, int x, int y)
+{
+	data->player_x_pos = x;
+	data->player_y_pos = y;
+	data->player_flag = 1;
+}
+
 void	check_map_syntax(t_data *data)
 {
 	int	i;
 	int	j;
+	int	player_flag;
 
 	i = 0;
+	player_flag = 0;
 	while (data->map[i] != NULL)
 	{
 		j = 0;
 		while (j < data->map_width)
 		{
-			if (data->map[i][j].type != '1'
-				&& data->map[i][j].type != '0' && data->map[i][j].type != ' ')
+			if (ft_strchr("10NESWX", data->map[i][j].type) == NULL)
 				sys_error_exit(data, "Invalid map syntax", 0);
+			if ((data->map[i][j].type == 'E' || data->map[i][j].type == 'N'
+				|| data->map[i][j].type == 'W' || data->map[i][j].type == 'S'))
+			{
+				if (data->player_flag == 0)
+					assign_player_position (data, j, i);
+				else
+					sys_error_exit(data, "Too many players", 0);
+			}
 			j++;
 		}
 		i++;
 	}
 }
 
-void	get_widest_width(t_data *data)
+static void	get_widest_width(t_data *data)
 {
 	int	i;
 	int	j;
@@ -52,51 +68,6 @@ void	get_widest_width(t_data *data)
 	data->map_width = width;
 }
 
-void	allocate_map(t_data *data)
-{
-	int	i;
-
-	data->map = malloc((data->map_height) * sizeof(t_map));
-	if (data->map == NULL)
-		sys_error_exit(data, "Malloc failed", 0);
-	i = 0;
-	get_widest_width(data);
-	while (i + data->info_lines_count < data->map_height)
-	{
-		data->map[i] = malloc((data->map_width) * sizeof(t_map));
-		if (data->map[i] == NULL)
-			sys_error_exit(data, "Malloc failed", 0);
-		i++;
-	}
-}
-
-int	assign_map_contents(t_data *data)
-{
-	int	i;
-	int	j;
-	int	k;
-
-	i = data->info_lines_count;
-	k = 0;
-	while (i < data->map_height)
-	{
-		j = 0;
-		while (data->file[i][j] != '\0')
-		{
-			data->map[k][j].type = data->file[i][j];
-			j++;
-		}
-		while (j < data->map_width)
-		{
-			data->map[k][j].type = ' ';
-			j++;
-		}
-		i++;
-		k++;
-	}
-	return (0);
-}
-
 int	check_texture_paths(t_data *data, char *map_name)
 {
 	if (data->texture_path_e == NULL
@@ -107,4 +78,3 @@ int	check_texture_paths(t_data *data, char *map_name)
 		return (-1);
 	return (0);
 }
-

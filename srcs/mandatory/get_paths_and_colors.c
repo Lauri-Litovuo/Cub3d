@@ -6,13 +6,13 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 13:23:47 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/07/30 15:33:50 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/07/30 16:18:56 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cubed.h"
 
-int	check_texture_paths(t_data *data, char *map_name)
+static int	check_texture_paths(t_data *data, char *map_name)
 {
 	if (data->texture_path_e == NULL
 		|| data->texture_path_n == NULL || data->texture_path_s == NULL
@@ -31,7 +31,7 @@ int	check_texture_paths(t_data *data, char *map_name)
 	return (0);
 }
 
-int	check_rgb_syntx(char *rgb, int len)
+static int	check_rgb_syntx(char *rgb, int len)
 {
 	int	num;
 	int	dot;
@@ -54,7 +54,7 @@ int	check_rgb_syntx(char *rgb, int len)
 	return (0);
 }
 
-int	rgb_atoi(int *color, char *rgb)
+static int	rgb_atoi(int *color, char *rgb)
 {
 	int		num;
 	int		len;
@@ -71,7 +71,7 @@ int	rgb_atoi(int *color, char *rgb)
 		return (0);
 }
 
-int	get_rgb_color(int *color, char *rgb)
+static int	get_rgb_color(int *color, char *rgb)
 {
 	int		i;
 	int		len;
