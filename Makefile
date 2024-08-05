@@ -17,7 +17,7 @@ SRCS	= $(MAND)/main.c $(MAND)/error_and_exit.c $(MAND)/get_map.c $(MAND)/utils.c
 		$(MAND)/key_actions.c $(MAND)/get_map_utils.c $(MAND)/map_validation_utils.c \
 		\
 		\
-		$(MAND)/debug.c 
+		$(MAND)/debug.c
 OBJS	= ${SRCS:.c=.o}
 
 BONSRCS	= $(BONUS)/main_bonus.c $(BONUS)/error_and_exit_bonus.c $(BONUS)/get_map_bonus.c $(BONUS)/utils_bonus.c \
@@ -27,7 +27,7 @@ BONSRCS	= $(BONUS)/main_bonus.c $(BONUS)/error_and_exit_bonus.c $(BONUS)/get_map
 		$(BONUS)/draw_player_icon_bonus.c $(BONUS)/check_map_borders_bonus.c \
 		$(BONUS)/get_paths_and_colors_bonus.c $(BONUS)/map_validation_bonus.c \
 		$(BONUS)/get_map_utils_bonus.c $(BONUS)/map_validation_utils_bonus.c \
-		$(BONUS)/validate_doors_and_enemies.c \
+		$(BONUS)/validate_doors_and_enemies.c  $(BONUS)/rotation.c\
 		\
 		\
 		$(BONUS)/debug_bonus.c

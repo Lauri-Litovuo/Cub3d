@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: llitovuo <llitovuo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 11:17:31 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/08/03 16:02:03 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/08/05 13:33:16 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,9 @@ int	main(int argc, char *argv[])
 	draw_image(data);
 	if (mlx_image_to_window(data->mlx, data->game_img, 0, 0) < 0)
 		error_exit(data, mlx_strerror(mlx_errno), 1);
+	mlx_set_cursor_mode(data->mlx, MLX_MOUSE_HIDDEN);
 	mlx_set_instance_depth(&data->game_img->instances[0], 1);
+	mlx_cursor_hook(data->mlx, &rotation, (void *)data);
 	mlx_key_hook(data->mlx, &keyhook, (void *)data);
 	mlx_loop(data->mlx);
 	mlx_terminate(data->mlx);

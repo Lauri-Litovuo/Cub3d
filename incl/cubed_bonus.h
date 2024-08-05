@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cubed_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: llitovuo <llitovuo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 11:18:06 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/08/03 16:02:15 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/08/05 14:16:01 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,14 @@
 # define VALIDCHARS "01 NEWSDA"
 # define VALIDMAPCHARS "01XNEWSDA"
 # define AREACHARS "0NEWSDA"
+# define PLAYER "SNEW"
+
+# define WS0 "./sprites/weapon/ws0"
+# define WS1 "./sprites/weapon/ws1"
+# define WS2 "./sprites/weapon/ws2"
+# define WS3 "./sprites/weapon/ws3"
+# define WS4 "./sprites/weapon/ws4"
+# define W_S_COUNT 5
 
 typedef struct s_map
 {
@@ -63,6 +71,8 @@ typedef struct s_data
 	mlx_image_t	*wall_img_s;
 	mlx_image_t	*wall_img_w;
 	mlx_image_t	*player_icon;
+	mlx_image_t	*gun[W_S_COUNT];
+	int			gun_sp_count;
 
 	uint8_t		*pixels; // pixel data of a single wall
 	t_map		**map;
@@ -145,6 +155,7 @@ void		key_action_a(t_data *data);
 void		key_action_s(t_data *data);
 void		key_action_d(t_data *data);
 int			check_for_collision(t_data *data, double direction);
+void		rotation(double x_pos, double y_pos, void *param);
 
 // UTILS
 
