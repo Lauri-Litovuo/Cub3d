@@ -63,17 +63,6 @@ Once the game is running, use the following controls to navigate and interact:
 
 Explore the maze, avoid or fight enemies, and find the exit to win the game!
 
-## Gameplay
-
-Here is a gameplay video from the game.
-
-<p align="center">
-   <video width="600" controls>
-      <source src="https://github.com/Lauri-Litovuo/Cub3d/blob/main/videos/Cub3d.mp4" type="video/mp4">
-      Your browser does not support the video tag.
-   </video>
-</p>
-
 ## Game Mechanics
 
 - **Raycasting**: We implemented a raycasting algorithm to project a 3D view from a 2D map. Rays are cast from the player’s viewpoint, and the distance to the nearest wall is calculated to determine the height of the walls on the screen.
